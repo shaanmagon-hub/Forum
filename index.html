@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#004aad" />
+  <title>Forum — Learn · Debate · Act</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Stand-in logo mark (two speech bubbles). Replace with the real logo file when available. -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="0 0 48 42">
+      <path d="M36 23l8 7-11-2z" />
+      <ellipse cx="30" cy="15" rx="14" ry="12" />
+      <path d="M9 32l-6 7 11-3z" />
+      <ellipse cx="18" cy="25" rx="14" ry="12" />
+    </symbol>
+  </svg>
+
+  <div class="app" id="app">
+    <main>
+      <!-- ============ BRIEF ============ -->
+      <section class="screen scroll" id="brief" aria-label="Daily brief">
+        <header class="page-head">
+          <div>
+            <p class="eyebrow" id="briefDate">Yesterday</p>
+            <h1>The Daily Brief</h1>
+          </div>
+          <span class="pill">2 min</span>
+        </header>
+
+        <div class="player" id="player">
+          <div class="player-art"><span class="placeholder-note">Brief video goes here</span></div>
+          <button class="play-btn" id="playBtn" aria-label="Play brief">
+            <svg viewBox="0 0 24 24" class="i-play"><path d="M8 5v14l11-7z"/></svg>
+            <svg viewBox="0 0 24 24" class="i-pause"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>
+          </button>
+          <div class="player-bar">
+            <span id="timeNow">0:00</span>
+            <div class="track" id="track"><div class="fill" id="fill"></div></div>
+            <span>2:00</span>
+          </div>
+        </div>
+
+        <h2 class="section-title">In this brief</h2>
+        <ol class="chapters" id="chapters"></ol>
+
+        <h2 class="section-title">Earlier this week</h2>
+        <div class="strip" id="pastBriefs"></div>
+      </section>
+
+      <!-- ============ FEED ============ -->
+      <section class="screen" id="feed" aria-label="Video feed">
+        <div class="feed-tabs">
+          <button class="active">For You</button>
+          <button>Following</button>
+          <button>Topics</button>
+        </div>
+        <div class="feed-scroll" id="feedScroll"></div>
+      </section>
+
+      <!-- ============ CREATE (upload) ============ -->
+      <section class="screen scroll" id="create" aria-label="Upload a video">
+        <header class="page-head">
+          <div>
+            <p class="eyebrow">Share your take</p>
+            <h1>New video</h1>
+          </div>
+        </header>
+
+        <button class="dropzone" id="dropzone" type="button">
+          <svg viewBox="0 0 24 24"><path d="M12 16V5M7 10l5-5 5 5M5 19h14"/></svg>
+          <b id="dropTitle">Select a video</b>
+          <span id="dropHint">MP4 or MOV, up to 60 seconds</span>
+        </button>
+        <input type="file" id="fileInput" accept="video/*" hidden />
+
+        <form class="form" id="createForm" novalidate>
+          <div class="field">
+            <label for="caption">Caption</label>
+            <textarea id="caption" rows="3" maxlength="150" placeholder="What's this video about?"></textarea>
+          </div>
+          <div class="field">
+            <label for="videoTopic">Topic</label>
+            <select id="videoTopic"></select>
+          </div>
+          <div class="field">
+            <label for="sources">Sources <span class="optional">optional</span></label>
+            <input id="sources" type="url" placeholder="Link the reporting or data behind your claims" />
+          </div>
+          <label class="switch-row">
+            <span><b>Open to debate</b><small>Let viewers challenge you on this video</small></span>
+            <input type="checkbox" id="allowDebate" checked />
+          </label>
+          <button class="btn block" type="submit">Post video</button>
+        </form>
+      </section>
+
+      <!-- ============ DEBATES ============ -->
+      <section class="screen scroll" id="debates" aria-label="Debates">
+        <header class="page-head">
+          <div>
+            <p class="eyebrow">Defend it or challenge it</p>
+            <h1>Debates</h1>
+          </div>
+        </header>
+
+        <h2 class="section-title"><span class="live-dot"></span> Live now</h2>
+        <div class="strip" id="liveList"></div>
+
+        <h2 class="section-title">Open stances</h2>
+        <div class="chips" id="topicChips"></div>
+        <div class="stances" id="stanceList"></div>
+
+        <button class="fab" id="postBtn">
+          <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+          Post a stance
+        </button>
+      </section>
+
+      <!-- ============ PROFILE ============ -->
+      <section class="screen scroll" id="profile" aria-label="Profile">
+        <header class="profile-head">
+          <span class="avatar xl" id="profileAvatar"></span>
+          <div class="profile-id">
+            <h1 id="profileHandle"></h1>
+            <p class="bio">Your bio goes here. Tell people what you care about.</p>
+          </div>
+          <dl class="stats">
+            <div><dt>Videos</dt><dd>9</dd></div>
+            <div><dt>Followers</dt><dd>248</dd></div>
+            <div><dt>Following</dt><dd>131</dd></div>
+            <div><dt>Debates won</dt><dd>3 / 5</dd></div>
+          </dl>
+          <div class="profile-actions">
+            <button class="btn ghost">Edit profile</button>
+            <button class="btn ghost" id="logoutBtn">Log out</button>
+          </div>
+        </header>
+
+        <div class="segmented" id="profileTabs">
+          <button class="active" data-view="videos">Videos</button>
+          <button data-view="debates">Debates</button>
+          <button data-view="stances">Stances</button>
+        </div>
+        <div id="profileBody"></div>
+      </section>
+    </main>
+
+    <!-- ============ NAVIGATION ============ -->
+    <nav class="tabbar" aria-label="Main">
+      <div class="brand"><svg class="logo"><use href="#logo"/></svg><span class="wordmark">Forum</span></div>
+      <button class="tab" data-tab="brief">
+        <svg viewBox="0 0 24 24"><path d="M4 5h16v14H4zM8 9h8M8 13h8M8 17h4"/></svg>
+        <span>Brief</span>
+      </button>
+      <button class="tab" data-tab="feed">
+        <svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M10.500 9.500v5l4-2.500z"/></svg>
+        <span>Feed</span>
+      </button>
+      <button class="tab create" data-tab="create" aria-label="Create">
+        <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+        <span>Create</span>
+      </button>
+      <button class="tab" data-tab="debates">
+        <svg viewBox="0 0 24 24"><path d="M4 5h10v7H8l-4 3zM20 10v9l-3-2h-6v-2"/></svg>
+        <span>Debates</span>
+      </button>
+      <button class="tab" data-tab="profile">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.500-4 4.500-5 8-5s6.500 1 8 5"/></svg>
+        <span>Profile</span>
+      </button>
+    </nav>
+
+    <!-- ============ DEBATE ROOM (overlay) ============ -->
+    <div class="room" id="room" hidden>
+      <div class="room-top">
+        <button class="icon-btn" id="roomBack" aria-label="Leave debate">
+          <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>
+        </button>
+        <span class="live-badge">LIVE</span>
+        <span class="viewers" id="roomViewers"></span>
+      </div>
+      <p class="room-statement" id="roomStatement"></p>
+      <div class="stage">
+        <div class="pane a speaking">
+          <span class="role">Defending</span>
+          <span class="placeholder-note">Live video</span>
+          <span class="who" id="roomA"></span>
+        </div>
+        <div class="pane b">
+          <span class="role">Challenging</span>
+          <span class="placeholder-note">Live video</span>
+          <span class="who" id="roomB"></span>
+        </div>
+        <div class="round">Round 2 of 3 · <b>1:24</b></div>
+      </div>
+      <div class="vote">
+        <div class="vote-bar"><div class="vote-a" id="voteA"></div></div>
+        <div class="vote-row">
+          <button class="vote-btn a" data-side="a">Side with defender <b id="pctA"></b></button>
+          <button class="vote-btn b" data-side="b">Side with challenger <b id="pctB"></b></button>
+        </div>
+      </div>
+      <div class="chat-input">Live chat goes here…</div>
+    </div>
+
+    <!-- ============ SIGN UP / LOG IN (overlay) ============ -->
+    <div class="auth" id="auth" hidden>
+      <div class="auth-brand">
+        <svg class="logo"><use href="#logo"/></svg>
+        <p class="wordmark">Forum</p>
+        <p class="tagline">Learn <i>•</i> Debate <i>•</i> Act</p>
+        <p class="pitch">Politics and current events, explained and argued by people your age.</p>
+      </div>
+      <form class="auth-card form" id="authForm">
+        <h2 id="authTitle"></h2>
+        <div class="field">
+          <label for="authEmail">Email</label>
+          <input id="authEmail" type="email" autocomplete="email" required placeholder="you@example.com" />
+        </div>
+        <div class="field signup-only">
+          <label for="authUser">Username</label>
+          <input id="authUser" type="text" autocomplete="username" required minlength="3" maxlength="20" pattern="[A-Za-z0-9_]+" placeholder="letters, numbers, underscores" />
+        </div>
+        <div class="field">
+          <label for="authPass">Password</label>
+          <input id="authPass" type="password" required minlength="8" placeholder="At least 8 characters" />
+        </div>
+        <div class="field signup-only">
+          <label for="authDob">Date of birth</label>
+          <input id="authDob" type="date" required />
+        </div>
+        <div class="field signup-only">
+          <label>Topics to follow</label>
+          <div class="chips wrap" id="authTopics"></div>
+        </div>
+        <button class="btn block" type="submit" id="authSubmit"></button>
+        <p class="fine signup-only">By signing up you agree to the Terms and Community Guidelines.</p>
+        <p class="fine"><span id="authSwitchText"></span> <button type="button" class="link" id="authSwitch"></button></p>
+      </form>
+    </div>
+
+    <!-- ============ BOTTOM SHEET + TOAST ============ -->
+    <div class="sheet-wrap" id="sheetWrap" hidden>
+      <div class="backdrop" id="backdrop"></div>
+      <div class="sheet form" id="sheet"></div>
+    </div>
+    <div class="toast" id="toast" hidden></div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
